@@ -34,9 +34,36 @@ dot:
     li t0, 0            
     li t1, 0         
 
+    slli t4, a3, 2
+    slli t5, a4, 2
 loop_start:
     bge t1, a2, loop_end
     # TODO: Add your own implementation
+    lw   t2, 0(a0)
+    lw   t3, 0(a1)
+    
+    beq  t2, zero, if_zero
+    beq  t3, zero, if_zero
+
+    blt  zero, t3, mul
+    xori t3, t3, -1
+    addi t3, t3, 1
+    sub  t2, zero, t2
+mul:
+    andi t6, t3, 1
+    beq  t6, zero, conti
+    add  t0, t0, t2
+conti:
+    srli t3, t3, 1
+    slli t2, t2, 1
+    bne  t3, zero, mul
+
+if_zero:  # do nothing
+
+    add  a0, a0, t4
+    add  a1, a1, t5
+    addi t1, t1, 1
+    j    loop_start
 
 loop_end:
     mv a0, t0

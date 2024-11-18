@@ -167,6 +167,32 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s8)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
+
+    beq  t0, zero, if_zero_0
+    beq  t1, zero, if_zero_0
+
+    blt  zero, t1, start_0
+    xori t1, t1, -1
+    addi t1, t1, 1
+    sub  t0, zero, t0
+start_0:
+    mv   t2, zero
+mul_0:
+    andi t3, t1, 1
+    beq  t3, zero, conti_0
+    add  t2, t2, t0
+conti_0:
+    srli t1, t1, 1
+    slli t0, t0, 1
+    bne  t1, zero, mul_0
+    j    done_0
+
+if_zero_0:
+    mv   t2, zero
+
+done_0:
+    mv   a0, t2
+
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -204,6 +230,33 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s8)
     # mul a1, t0, t1 # length of h array and set it as second argument
+
+    beq  t0, zero, if_zero_1
+    beq  t1, zero, if_zero_1
+
+    blt  zero, t1, start_1
+    xori t1, t1, -1
+    addi t1, t1, 1
+    sub  t0, zero, t0
+start_1:
+    mv   t2, zero
+mul_1:
+    andi t3, t1, 1
+    beq  t3, zero, conti_1
+    add  t2, t2, t0
+conti_1:
+    srli t1, t1, 1
+    slli t0, t0, 1
+    bne  t1, zero, mul_1
+    j    done_1
+
+if_zero_1:
+    mv   t2, zero
+
+done_1:
+    mv   a1, t2
+
+
     # FIXME: Replace 'mul' with your own implementation
     
     jal relu
@@ -227,6 +280,32 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s6)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
+
+    beq  t0, zero, if_zero_2
+    beq  t1, zero, if_zero_2
+
+    blt  zero, t1, start_2
+    xori t1, t1, -1
+    addi t1, t1, 1
+    sub  t0, zero, t0
+start_2:
+    mv   t2, zero
+mul_2:
+    andi t3, t1, 1
+    beq  t3, zero, conti_2
+    add  t2, t2, t0
+conti_2:
+    srli t1, t1, 1
+    slli t0, t0, 1
+    bne  t1, zero, mul_2
+    j    done_2
+
+if_zero_2:
+    mv   t2, zero
+
+done_2:
+    mv   a0, t2
+    
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -286,8 +365,36 @@ classify:
     mv a0, s10 # load o array into first arg
     lw t0, 0(s3)
     lw t1, 0(s6)
+    j  start
     mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
+
+start:
+    beq  t0, zero, if_zero_3
+    beq  t1, zero, if_zero_3
+
+    blt  zero, t1, start_3
+    xori t1, t1, -1
+    addi t1, t1, 1
+    sub  t0, zero, t0
+start_3:
+    mv   t2, zero
+mul_3:
+    andi t3, t1, 1
+    beq  t3, zero, conti_3
+    add  t2, t2, t0
+conti_3:
+    srli t1, t1, 1
+    slli t0, t0, 1
+    bne  t1, zero, mul_3
+    j    done_3
+
+if_zero_3:
+    mv   t2, zero
+
+done_3:
+    mv   a1, t2
+
     
     jal argmax
     

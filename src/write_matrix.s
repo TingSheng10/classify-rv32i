@@ -62,6 +62,35 @@ write_matrix:
     bne a0, t0, fwrite_error
 
     # mul s4, s2, s3   # s4 = total elements
+
+    mv   t0, s2
+    mv   t1, s3
+
+    beq  t0, zero, if_zero
+    beq  t1, zero, if_zero
+
+    blt  zero, t1, start
+    xori t1, t1, -1
+    addi t1, t1, 1
+    sub  t0, zero, t0
+start:
+    mv   t2, zero
+mul_:
+    andi t3, t1, 1
+    beq  t3, zero, conti
+    add  t2, t2, t0
+conti:
+    srli t1, t1, 1
+    slli t0, t0, 1
+    bne  t1, zero, mul_
+    j    done
+
+if_zero:
+    mv   t2, zero
+
+done:
+    mv   s4, t2
+
     # FIXME: Replace 'mul' with your own implementation
 
     # write matrix data to file

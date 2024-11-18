@@ -75,6 +75,32 @@ read_matrix:
     sw t2, 0(s4)     # saves num cols
 
     # mul s1, t1, t2   # s1 is number of elements
+
+    beq  t1, zero, if_zero
+    beq  t2, zero, if_zero
+
+    blt  zero, t2, start
+    xori t2, t2, -1
+    addi t2, t2, 1
+    sub  t1, zero, t1
+start:
+    mv   t3, zero
+mul_:
+    andi t4, t2, 1
+    beq  t4, zero, conti
+    add  t3, t3, t1
+conti:
+    srli t2, t2, 1
+    slli t1, t1, 1
+    bne  t2, zero, mul_
+    j    done
+
+if_zero:
+    mv   t3, zero
+
+done:
+    mv   s1, t3
+
     # FIXME: Replace 'mul' with your own implementation
 
     slli t3, s1, 2
